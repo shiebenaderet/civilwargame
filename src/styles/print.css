@@ -1,0 +1,77 @@
+/* ===============================================
+   PRINT STYLES
+   =============================================== */
+@media print {
+    * { background: white !important; color: black !important; text-shadow: none !important; box-shadow: none !important; }
+    @page { margin: 0.75in; size: letter; }
+
+    /* Hide interactive elements */
+    .controls-panel, .proceed-btn, .back-btn, .choice-option button,
+    .translate-select, .vocab-button, #vocabSidebar, .click-to-expand,
+    .main-navbar, .vocab-sidebar, .campaign-log-modal, .settings-dropdown,
+    .image-toggle-group, .nav-controls, button:not(.print-friendly),
+    .choice-option .expand-icon, .battle-animation-overlay, .version-info {
+        display: none !important;
+    }
+
+    body {
+        font-family: Georgia, 'Times New Roman', serif !important;
+        font-size: 12pt !important; line-height: 1.4 !important;
+        margin: 0 !important; padding: 20pt !important;
+    }
+
+    .game-container {
+        max-width: none !important; padding: 0 !important;
+        margin: 0 !important; box-shadow: none !important; border: none !important;
+    }
+
+    h1 { font-size: 18pt !important; text-align: center !important; margin-bottom: 12pt !important; page-break-after: avoid !important; }
+    h2 { font-size: 16pt !important; margin: 12pt 0 6pt 0 !important; page-break-after: avoid !important; }
+    h3 { font-size: 14pt !important; margin: 10pt 0 4pt 0 !important; page-break-after: avoid !important; }
+
+    .battle-briefing { display: block !important; page-break-inside: avoid; margin-bottom: 20pt; }
+    .battle-context, .strategic-choices {
+        background: none !important; border: 1pt solid #ccc;
+        padding: 10pt; margin: 10pt 0; border-radius: 0;
+    }
+    .choice-option {
+        border: 1pt solid #999; margin: 5pt 0; padding: 8pt;
+        page-break-inside: avoid; background: none !important;
+    }
+    .choice-option.expanded .choice-details {
+        display: block !important; max-height: none !important; opacity: 1 !important;
+    }
+    .side-card {
+        border: 2pt solid black; margin: 10pt 0; padding: 10pt;
+        page-break-inside: avoid; background: none !important;
+    }
+    .historical-note {
+        background: #f8f8f8 !important; border: 1pt solid #ccc;
+        padding: 8pt; margin: 12pt 0; page-break-inside: avoid;
+    }
+    .battle-image, .battle-map, .side-image { display: none !important; }
+    .vocab-term { font-weight: bold !important; text-decoration: underline !important; }
+    p, li { orphans: 3; widows: 3; }
+    h1, h2, h3, h4, h5, h6 { page-break-after: avoid; font-weight: bold; }
+    a[href]:after { content: " (" attr(href) ")"; font-size: 0.8em; color: #666; }
+
+    body::before {
+        content: "Civil War Battle Simulation - Educational Edition";
+        display: block; text-align: center; font-size: 16pt;
+        font-weight: bold; margin-bottom: 20pt; padding-bottom: 10pt;
+        border-bottom: 2pt solid black;
+    }
+
+    .image-credits-section { page-break-before: always; }
+    .credits-toggle { display: none; }
+    .credits-content {
+        display: block !important; max-height: none !important;
+        opacity: 1 !important; padding: 10pt !important;
+        background: white !important; border: 1pt solid black;
+    }
+    .credits-grid { grid-template-columns: 1fr 1fr; gap: 10pt; }
+    .credit-item {
+        background: none !important; border: 1pt solid #ccc;
+        border-left: 3pt solid black; page-break-inside: avoid;
+    }
+}

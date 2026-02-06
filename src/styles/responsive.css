@@ -1,0 +1,35 @@
+/* ===============================================
+   RESPONSIVE STYLES
+   =============================================== */
+@media (max-width: 700px) {
+    .game-container { padding: var(--space-3); padding-left: var(--space-5); }
+    .game-title { font-size: var(--font-size-3xl); }
+    .side-card { width: 100%; max-width: 350px; }
+    .sides-container { flex-direction: column; gap: var(--space-4); align-items: center; }
+    .choice-pros-cons { grid-template-columns: 1fr; }
+    .vocab-tooltip { width: 250px; }
+    .vocab-sidebar { width: 90vw; max-width: 300px; }
+    body.vocab-open .main-navbar, body.vocab-open .game-container { transform: none; }
+    .navbar-content { padding: var(--space-2) var(--space-3); gap: var(--space-2); flex-wrap: wrap; }
+    .nav-game-title { font-size: var(--font-size-lg); }
+    .nav-subtitle { display: none; }
+    .navbar-stats { gap: var(--space-1); order: 3; width: 100%; justify-content: center; margin-top: var(--space-2); }
+    .stat-item { padding: var(--space-1) var(--space-2); font-size: var(--font-size-xs); }
+    .nav-btn { width: var(--space-8); height: var(--space-8); font-size: var(--font-size-base); }
+    .settings-menu { right: -10px; min-width: 180px; }
+    .battle-results-container { padding: 20px; margin: 10px; width: 95%; }
+    .battle-outcome { font-size: 2.2em; padding: 10px 20px; }
+    .outcome-highlight { font-size: 1em; padding: 10px 15px; }
+    .die { width: 55px; height: 55px; font-size: 1.8em; }
+}
+
+@media (max-width: 768px) {
+    .battle-results-content { padding: 20px; margin: 20px; }
+    .battle-outcome-modal { font-size: 2em; }
+    .result-icon-large { font-size: 3em; }
+}
+
+@media (max-width: 640px) {
+    .sides-container { flex-direction: column; gap: var(--space-4); align-items: center; }
+    .side-card { width: 100%; max-width: 350px; min-width: auto; flex: none; }
+}
