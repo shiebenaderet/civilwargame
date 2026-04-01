@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civil War Battle Simulation - Educational Edition v2.0</title>
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+
+    <!-- Google Fonts -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Pro:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Pro:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
+</head>
+<body onload="initializeTheme && initializeTheme()">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div id="google_translate_element"></div>
+
+    <!-- Main Navigation Bar -->
+    <nav class="main-navbar" role="navigation" aria-label="Main navigation">
+        <div class="navbar-content">
+            <div class="navbar-brand">
+                <h1 class="nav-game-title">&#9876;&#65039; Civil War Simulation</h1>
+                <span class="nav-subtitle">Educational Edition</span>
+            </div>
+
+            <div class="navbar-stats" id="navbarStats" style="display: none;">
+                <div class="stat-item rank-display">Rank: <span id="navRank">Private</span></div>
+                <div class="stat-item">Score: <span id="navScore">0</span></div>
+                <div class="stat-item">Soldiers: <span id="navSoldiers">0</span></div>
+                <div class="stat-item">Battle <span id="navBattleNumber">1</span>/10</div>
+                <div class="stat-item">Wins: <span id="navWins">0</span></div>
+            </div>
+
+            <div class="navbar-controls">
+                <button class="nav-btn" id="muteBtn" aria-label="Toggle sound" title="Toggle Sound">&#128264;</button>
+                <button class="nav-btn primary-action" id="campaignLogNavBtn" style="display: none;" aria-label="View campaign log" title="Campaign Log">&#128202;</button>
+                <div class="settings-dropdown">
+                    <button class="nav-btn settings-btn" id="settingsBtn" aria-label="Open menu" aria-expanded="false" title="Menu">&#8943;</button>
+                    <div class="settings-menu" id="settingsMenu" role="menu" aria-labelledby="settingsBtn">
+                        <div class="menu-section">
+                            <div class="menu-section-title">Learning Tools</div>
+                            <button class="settings-item" id="vocabToggleNav" role="menuitem" aria-label="Toggle vocabulary help">
+                                <span class="menu-icon">&#128218;</span> Vocabulary Help
+                                <span class="menu-status" id="vocabStatus">OFF</span>
+                            </button>
+                        </div>
+                        <div class="settings-divider"></div>
+                        <div class="menu-section">
+                            <div class="menu-section-title">Appearance</div>
+                            <button class="settings-item theme-toggle-item" id="themeToggle" onclick="toggleTheme()" role="menuitem" aria-label="Switch theme">
+                                <span class="menu-icon theme-icon">&#9728;</span> <span class="theme-text">Light Theme</span>
+                            </button>
+                            <div class="settings-item translate-item">
+                                <span class="menu-icon">&#127760;</span>
+                                <select class="translate-select-nav" id="translateSelect" onchange="if(this.value) translateWithGoogle(this.value); this.value='';" aria-label="Change language">
+                                    <option value="">English</option>
+                                    <option value="Spanish">Espa&#241;ol</option>
+                                    <option value="French">Fran&#231;ais</option>
+                                    <option value="Korean">&#54620;&#44397;&#50612;</option>
+                                    <option value="Ukrainian">&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072;</option>
+                                    <option value="Russian">&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</option>
+                                    <option value="Portuguese">Portugu&#234;s</option>
+                                    <option value="Chinese">&#20013;&#25991;</option>
+                                    <option value="Japanese">&#26085;&#26412;&#35486;</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="settings-divider" id="gameActionsDiv" style="display: none;"></div>
+                        <div class="menu-section" id="gameActionsSection" style="display: none;">
+                            <div class="menu-section-title">Game</div>
+                            <button class="settings-item danger-item" id="startOverNavBtn" role="menuitem">
+                                <span class="menu-icon">&#128260;</span> Start Over
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Vocabulary Sidebar -->
+    <div class="vocab-overlay" id="vocabOverlay"></div>
+    <nav class="vocab-sidebar" id="vocabSidebar" role="complementary" aria-label="Vocabulary definitions">
+        <h3>&#128218; Key Terms</h3>
+        <ul class="vocab-list">
+            <li class="vocab-item"><div class="vocab-term-name">Slavery</div><div class="vocab-definition-text">The practice of owning people as property and forcing them to work without pay</div></li>
+            <li class="vocab-item"><div class="vocab-term-name">States' Rights</div><div class="vocab-definition-text">The belief that each state should decide its own laws instead of the federal government</div></li>
+            <li class="vocab-item"><div class="vocab-term-name">Civil War</div><div class="vocab-definition-text">A war fought between people from the same country</div></li>
+            <li class="vocab-item"><div class="vocab-term-name">Reinforcements</div><div class="vocab-definition-text">Extra soldiers sent to help your army when you need them</div></li>
+            <li class="vocab-item"><div class="vocab-term-name">Flanking</div><div class="vocab-definition-text">A military tactic of attacking the sides of an enemy formation</div></li>
+            <li class="vocab-item"><div class="vocab-term-name">Fortification</div><div class="vocab-definition-text">Structures built to defend against attack</div></li>
+            <li class="vocab-item"><div class="vocab-term-name">Retreat</div><div class="vocab-definition-text">Moving forces away from battle to a safer position</div></li>
+            <li class="vocab-item"><div class="vocab-term-name">Casualties</div><div class="vocab-definition-text">Soldiers killed, wounded, or missing in battle</div></li>
+        </ul>
+    </nav>
+
+    <!-- Battle Animation Overlay -->
+    <div class="battle-animation-overlay" id="battleAnimOverlay">
+        <div class="battle-anim-content">
+            <div class="battle-anim-title" id="battleAnimTitle">The Battle Rages...</div>
+            <div class="battle-anim-subtitle" id="battleAnimSubtitle">Fortune of war decides the outcome</div>
+            <div class="battle-progress-container">
+                <div class="battle-progress-bar" id="battleProgressBar"></div>
+            </div>
+            <div class="dice-container">
+                <div class="die" id="die1">&#9856;</div>
+                <div class="die" id="die2">&#9856;</div>
+            </div>
+            <div class="fortune-result" id="fortuneResult"></div>
+            <div class="fortune-chance" id="fortuneChance"></div>
+        </div>
+    </div>
+
+    <main class="game-container" id="main-content" role="main" aria-label="Civil War Battle Simulation Game">
+        <!-- Side Selection Screen -->
+        <div class="side-selection" id="sideSelection" role="region" aria-label="Choose your side">
+            <h2 class="section-title">Choose Your Side</h2>
+            <p class="subtitle">Command either the Union or Confederacy through 10 historic battles</p>
+
+            <div class="civil-war-intro" id="civilWarIntro" style="display: none;">
+                <h2 style="color: #ffd700; text-align: center; margin-bottom: 20px;">&#9876;&#65039; The American Civil War (1861-1865) &#9876;&#65039;</h2>
+                <div class="intro-content">
+                    <p style="font-size: 1.1em; line-height: 1.6; margin-bottom: 20px; text-align: center;">
+                        From 1861 to 1865, Americans fought Americans in our nation's deadliest conflict.
+                        Over 600,000 people died fighting about <strong style="color: #ffd700;">slavery</strong> and whether states could leave the Union.
+                    </p>
+                    <div style="background: rgba(255, 215, 0, 0.1); padding: 15px; border-radius: 10px; margin: 20px 0; text-align: center;">
+                        <p style="font-size: 1em; line-height: 1.5; margin: 0;">
+                            <strong>&#127919; Your Mission:</strong> Command one side through 10 major battles, making the same tough decisions real generals faced!
+                        </p>
+                    </div>
+                    <div style="text-align: center; margin: 20px 0;">
+                        <button onclick="hideIntroduction()" style="background: linear-gradient(135deg, #059669, #10b981); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: 'Georgia', serif; font-size: 1em;">
+                            Continue to Side Selection &#8594;
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resume-campaign-section" id="resumeSection" style="display: none;">
+                <button class="resume-btn" id="resumeBtn">&#9876;&#65039; Resume Campaign</button>
+                <div class="resume-info" id="resumeInfo">Battle 3/10 - Score: 1,200</div>
+                <button class="resume-discard" id="resumeDiscard">Discard saved game</button>
+            </div>
+
+            <div class="sides-container">
+                <div class="side-card union-card" id="unionCard" role="button" tabindex="0" aria-labelledby="union-name" aria-describedby="union-description">
+                    <span class="side-flag" aria-hidden="true">&#127482;&#127480;</span>
+                    <h2 class="side-name" id="union-name">Union (The North)</h2>
+                    <div id="union-description">
+                        <p class="side-description">
+                            <strong>&#127981; Industrial Powerhouse</strong><br>
+                            You command President Lincoln's forces fighting to keep America united and end <strong style="color: #ffd700;">slavery</strong> forever.
+                            Use your factories, railroads, and larger population to crush the rebellion!
+                        </p>
+                        <div style="background: rgba(59, 130, 246, 0.2); padding: 10px; border-radius: 8px; margin: 10px 0;">
+                            <p style="font-size: 0.9em; margin: 0;"><strong>Your Advantages:</strong> More <strong style="color: #ffd700;">reinforcements</strong>, better weapons, naval blockade</p>
+                        </div>
+                        <p class="soldier-count">Starting Army: 1,500,000 soldiers</p>
+                        <p class="victory-condition">&#127919; Win 6 out of 10 battles to save the Union!</p>
+                    </div>
+                    <button class="select-strategy-btn sr-only focusable">Select Union Army</button>
+                </div>
+
+                <div class="side-card confederacy-card" id="confederacyCard" role="button" tabindex="0" aria-labelledby="confederacy-name" aria-describedby="confederacy-description">
+                    <span class="side-flag" aria-hidden="true">&#127988;</span>
+                    <h2 class="side-name" id="confederacy-name">Confederacy (The South)</h2>
+                    <div id="confederacy-description">
+                        <p class="side-description">
+                            <strong>&#9876;&#65039; Defending the South</strong><br>
+                            Fight for Southern independence and defend your homeland! The Confederacy seceded because they wanted to preserve <strong style="color: #ffd700;">slavery</strong> and their way of life.
+                            You're outnumbered, but you have skilled generals and fight on familiar ground.
+                        </p>
+                        <div style="background: rgba(107, 114, 128, 0.2); padding: 10px; border-radius: 8px; margin: 10px 0;">
+                            <p style="font-size: 0.9em; margin: 0;"><strong>Your Advantages:</strong> Experienced generals like Lee, fighting on home territory, strong defensive positions</p>
+                        </div>
+                        <p class="soldier-count">Starting Army: 1,000,000 soldiers</p>
+                        <p class="victory-condition">&#127919; Win 5 out of 10 battles to gain independence!</p>
+                    </div>
+                    <button class="select-strategy-btn sr-only focusable">Select Confederate Army</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Side Introduction Screen -->
+        <div class="side-introduction" id="sideIntroduction" role="region" aria-label="Side introduction and objectives">
+            <div class="leader-message">
+                <div class="leader-portrait" id="leaderPortrait">&#127913;</div>
+                <h2 class="leader-name" id="leaderName">President Abraham Lincoln</h2>
+                <div class="message-text" id="leaderMessage"></div>
+            </div>
+            <div class="war-objectives">
+                <h3 class="objectives-title">Your Mission</h3>
+                <div id="objectivesList"></div>
+            </div>
+            <button class="proceed-btn" id="proceedToGame">Begin Your Command</button>
+            <button class="back-btn" id="backToSideBtn">&#8592; Choose Different Side</button>
+        </div>
+
+        <!-- Battle Briefing Screen -->
+        <div class="battle-briefing" id="battleBriefing" role="region" aria-label="Battle briefing and strategy selection">
+            <div class="briefing-header">
+                <h2 class="briefing-title" id="briefingTitle">First Battle of Bull Run</h2>
+                <p class="briefing-date" id="briefingDate">July 21, 1861</p>
+            </div>
+            <div class="battle-context">
+                <h3 class="context-title">Historical Context</h3>
+                <div class="context-text" id="contextText"></div>
+                <div class="battle-visual-container">
+                    <div class="visual-toggle-controls">
+                        <button class="visual-toggle-btn active" id="photoToggle" data-view="photo">&#128247; Historical Image</button>
+                        <button class="visual-toggle-btn" id="mapToggle" data-view="map">&#128506;&#65039; Battle Map</button>
+                    </div>
+                    <div class="battle-image" id="briefingImage"></div>
+                    <div class="battle-map" id="briefingMap" style="display: none;"></div>
+                </div>
+            </div>
+            <div class="strategic-choices" role="group" aria-labelledby="choices-title">
+                <h3 class="choices-title" id="choices-title">Choose Your Strategy</h3>
+                <p style="margin-bottom: 15px; color: #ccc; text-align: center; font-size: 1em;">
+                    &#128161; <strong>How to play:</strong> Click any strategy below to see its pros and cons, then click again to lock in your choice!
+                </p>
+                <div id="choicesList" role="radiogroup" aria-labelledby="choices-title"></div>
+            </div>
+        </div>
+
+        <!-- Game Screen (Battle Results) -->
+        <div class="game-screen" id="gameScreen" role="region" aria-label="Game dashboard and statistics">
+            <div class="battle-results-container">
+                <h2 class="battle-outcome" id="battleOutcome"></h2>
+                <div class="results-summary">
+                    <div class="result-card">
+                        <div class="result-icon" id="resultIcon">&#127942;</div>
+                        <div class="result-text" id="resultText">Your strategy succeeded!</div>
+                    </div>
+                    <div class="impact-stats">
+                        <div class="impact-item"><span class="impact-label">Casualties:</span><span class="impact-value casualties" id="casualtiesSummary">25,000 lost</span></div>
+                        <div class="impact-item"><span class="impact-label">Score:</span><span class="impact-value points" id="scoreSummary">+400 points</span></div>
+                        <div class="impact-item"><span class="impact-label">Army Size:</span><span class="impact-value soldiers" id="armySummary">975,000 remain</span></div>
+                    </div>
+                </div>
+                <div class="battle-explanation">
+                    <h3 class="explanation-title">What Happened?</h3>
+                    <div class="explanation-text" id="explanationText"></div>
+                    <div class="historical-note">
+                        <div class="historical-note-title">&#128218; Historical Note</div>
+                        <div id="historicalNote"></div>
+                    </div>
+                </div>
+                <button class="continue-battle-btn" id="continueBattleBtn">Continue to Next Battle</button>
+            </div>
+        </div>
+
+        <!-- Battle Results Modal -->
+        <div class="battle-results-modal" id="battleResultsModal" style="display: none;">
+            <div class="modal-overlay"></div>
+            <div class="battle-results-content">
+                <div class="results-header">
+                    <h2 class="battle-outcome-modal" id="battleOutcomeModal"></h2>
+                    <div class="result-icon-large" id="resultIconModal">&#127942;</div>
+                </div>
+                <div class="results-body">
+                    <div class="outcome-summary" id="outcomeSummaryModal"></div>
+                    <div class="score-changes" id="scoreChangesModal"></div>
+                </div>
+                <div class="results-actions">
+                    <button class="continue-btn primary-btn" id="continueFromResultsBtn">Continue Campaign</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaign Log Modal -->
+        <div class="campaign-log-modal" id="campaignLogModal">
+            <div class="campaign-log-container">
+                <div class="log-header">
+                    <h2 class="log-title">Your Campaign Progress</h2>
+                    <button class="close-log-btn" id="closeLogBtn">&times;</button>
+                </div>
+                <div class="campaign-overview">
+                    <div class="progress-summary">
+                        <div class="summary-stat"><div class="stat-number" id="battlesCompleted">0</div><div class="stat-label">Battles Fought</div></div>
+                        <div class="summary-stat"><div class="stat-number" id="winsCount">0</div><div class="stat-label">Victories</div></div>
+                        <div class="summary-stat"><div class="stat-number" id="currentScore">0</div><div class="stat-label">Total Score</div></div>
+                    </div>
+                    <div class="victory-progress">
+                        <h3 class="progress-title">Progress to Victory</h3>
+                        <div class="victory-bar">
+                            <div class="victory-fill" id="victoryFill" style="width: 0%"></div>
+                            <div class="victory-text" id="victoryText">0 of 6 wins needed</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="battle-timeline">
+                    <h3 class="timeline-title">Battle Timeline</h3>
+                    <div class="timeline-container" id="timelineContainer"></div>
+                </div>
+                <div class="strategy-analysis">
+                    <h3 class="analysis-title">Your Decision-Making</h3>
+                    <div class="strategy-stats" id="strategyStats"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- End Game Summary -->
+        <div class="end-game-summary" id="endGameSummary">
+            <div class="outcome-banner" id="outcomeBanner">
+                <h1 class="outcome-title" id="outcomeTitle"></h1>
+                <p class="outcome-subtitle" id="outcomeSubtitle">The Union is Preserved</p>
+            </div>
+            <div class="final-stats-container">
+                <h2 style="color: #ffd700; margin-bottom: 20px;">Campaign Summary</h2>
+                <div id="finalStatsText"></div>
+            </div>
+            <div class="image-credits-section">
+                <button class="credits-toggle" id="creditsToggle" aria-expanded="false" aria-controls="creditsContent" type="button">
+                    <span class="credits-icon">&#128247;</span>
+                    <span class="credits-text">View Image Credits</span>
+                    <span class="credits-arrow">&#9660;</span>
+                </button>
+                <div class="credits-content" id="creditsContent" aria-hidden="true">
+                    <h3>Image Credits &amp; Sources</h3>
+                    <p class="credits-note">All images used in this educational simulation are in the public domain.</p>
+                    <div class="credits-grid">
+                        <div class="credit-item"><strong>Battle of Bull Run:</strong><br>Library of Congress, Public Domain<br><small>LC-DIG-pga-01884</small></div>
+                        <div class="credit-item"><strong>Battle of Antietam:</strong><br>National Archives, Public Domain<br><small>165-SB-23</small></div>
+                        <div class="credit-item"><strong>Battle of Gettysburg:</strong><br>Library of Congress, Public Domain<br><small>LC-DIG-cwpb-03360</small></div>
+                        <div class="credit-item"><strong>Battle of Fredericksburg:</strong><br>National Park Service, Public Domain</div>
+                        <div class="credit-item"><strong>Battle of Chancellorsville:</strong><br>Library of Congress, Public Domain</div>
+                        <div class="credit-item"><strong>Battle of Chickamauga:</strong><br>Library of Congress, Public Domain</div>
+                        <div class="credit-item"><strong>Battle of the Wilderness:</strong><br>National Park Service, Public Domain</div>
+                        <div class="credit-item"><strong>Surrender at Appomattox:</strong><br>National Archives, Public Domain</div>
+                    </div>
+                    <div class="additional-credits">
+                        <h4>Additional Resources</h4>
+                        <p><strong>Battle Maps:</strong> Created for educational use based on historical sources</p>
+                        <p><strong>Historical Context:</strong> Based on official military records and historical documentation</p>
+                    </div>
+                </div>
+            </div>
+            <button class="play-again-btn" id="playAgainBtn">Play Again</button>
+        </div>
+    </main>
+
+    <div class="version-info">
+        <span>Civil War Battle Simulation v2.0.0</span>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
